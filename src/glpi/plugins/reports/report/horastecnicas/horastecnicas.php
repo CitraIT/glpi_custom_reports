@@ -27,6 +27,7 @@ if ($report->criteriasValidated()) {
    $cols = [new PluginReportsColumn('realname', __('User')),
             new PluginReportsColumn('date', __('Date')),
             new PluginReportsColumn('ticketid', __('Ticket')),
+            new PluginReportsColumn('ticketname', __('Title')),
             new PluginReportsColumn('content', __('Description')),
             new PluginReportsColumn('duree', __('Duration'))
 ];
@@ -36,7 +37,8 @@ if ($report->criteriasValidated()) {
 
    $query = "SELECT DATE_FORMAT(`glpi_tickettasks`.`date`, '%d/%m/%Y') AS date,
                     `glpi_users`.`firstname` as realname,
-                    `glpi_tickettasks`.`id` AS ticketid,
+                    CONCAT('<a href=\"http://glpi.citrait.com.br/front/ticket.form.php?id=',`glpi_tickets`.`id`,'\">',`glpi_tickets`.`id`,'</a>') AS ticketid,
+                    `glpi_tickets`.`name` AS ticketname,
                     REPLACE(REPLACE(`glpi_tickettasks`.`content`,'&#60;p&#62;',''),'&#60;/p&#62;','') AS content,
                     SEC_TO_TIME( sum( glpi_tickettasks.actiontime ) )  AS duree
               FROM `glpi_tickettasks`
@@ -56,3 +58,4 @@ if ($report->criteriasValidated()) {
 else {
    Html::footer();
 }
+
